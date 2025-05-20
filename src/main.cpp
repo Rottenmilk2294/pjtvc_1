@@ -20,14 +20,24 @@ double z;
 
 //PID
 float targetX = 90.0;
-float errorX = 0.0;
-float KpX = 0.7;
-float angleX = 0.0;
-
 float targetZ = 90.0;
+
+float errorX = 0.0;
 float errorZ = 0.0;
+
+float KpX = 1.0;
 float KpZ = 1.0;
-float angleZ = 0.0;
+float KdX = 1.0;
+float KdZ = 1.0;
+
+float Px = 0.0;
+float Pz = 0.0;
+float Dx = 0.0;
+float Dz = 0.0;
+
+
+
+
 
 void setup(){
 
@@ -66,22 +76,28 @@ z = RAD_TO_DEG * (atan2(-yAng, -xAng)+PI);
 
 
 //PID
-long time;
-time = millis();
+long t;
+t = millis();
 
+//x
 errorX = targetX-x;         //target is 90 degrees | MPU6050 flat
-angleX = errorX*KpX;
-servoX.write(angleX);       //servo mounted vertically
-if (angleX <= 0); {
-    servoX.write(angleX+90);
+Px = errorX*KpX;
+Dx = (((errorX) / t) * KdX);
+servoX.write(Px);       //servo mounted vertically
+if (Px <= 0); {
+    servoX.write(Px+90);
 }
 
+//z
 errorZ = targetZ-z;         
-angleZ = errorZ*KpZ;
-servoY.write(angleZ);       
-if (angleZ <= 0); {
-    servoY.write(angleZ);
+Pz = errorZ*KpZ;
+Dx = (((errorZ) / t) * KdZ);
+servoY.write(Pz);
+if (Pz <= 0); {
+    servoY.write(Pz);
 }
+
+
 
 
 //print
@@ -91,9 +107,11 @@ Serial.print(y);
 Serial.print("   |   ");
 Serial.print(z);
 Serial.print("   |   ");
-Serial.print(angleX);
+Serial.print(Px);
 Serial.print("   |   ");
-Serial.print(time/1000);
+Serial.print(Pz);
+Serial.print("   |   ");
+Serial.print(t/1000);
 Serial.print("   |   ");
 Serial.println();
 
