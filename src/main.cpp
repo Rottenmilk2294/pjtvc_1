@@ -36,7 +36,7 @@ float Dx = 0.0;
 float Dz = 0.0;
 
 
-
+//TEST
 
 
 void setup(){
@@ -76,8 +76,8 @@ z = RAD_TO_DEG * (atan2(-yAng, -xAng)+PI);
 
 
 //PID
-long t;
-t = millis();
+long elapsed;
+elapsed = millis();
 
 //x
 errorX = targetX-x;         //target is 90 degrees | MPU6050 flat
