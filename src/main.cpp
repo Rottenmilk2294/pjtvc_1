@@ -35,8 +35,9 @@ float Pz = 0.0;
 float Dx = 0.0;
 float Dz = 0.0;
 
-
-
+long time;
+long startTime = 0;
+long interval;
 
 
 void setup(){
@@ -76,14 +77,13 @@ z = RAD_TO_DEG * (atan2(-yAng, -xAng)+PI);
 
 
 //PID
-long t;
-t = millis();
+time = millis();
 
 //x
 errorX = targetX-x;         //target is 90 degrees | MPU6050 flat
 Px = errorX*KpX;
-Dx = (((errorX) / t) * KdX);
-servoX.write(Px);       //servo mounted vertically
+Dx = (((errorX)) * KdX);
+servoX.write(Px);       //servo mounted vertically horn on bottom pointing up
 if (Px <= 0); {
     servoX.write(Px+90);
 }
@@ -91,10 +91,10 @@ if (Px <= 0); {
 //z
 errorZ = targetZ-z;         
 Pz = errorZ*KpZ;
-Dx = (((errorZ) / t) * KdZ);
+Dz = (((errorZ)) * KdZ);
 servoY.write(Pz);
 if (Pz <= 0); {
-    servoY.write(Pz);
+    servoY.write(Pz+90);
 }
 
 
@@ -111,7 +111,11 @@ Serial.print(Px);
 Serial.print("   |   ");
 Serial.print(Pz);
 Serial.print("   |   ");
-Serial.print(t/1000);
+Serial.print(Dx);
+Serial.print("   |   ");
+Serial.print(Dz);
+Serial.print("   |   ");
+Serial.print(time/1000);
 Serial.print("   |   ");
 Serial.println();
 
